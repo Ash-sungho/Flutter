@@ -1,4 +1,4 @@
-package com.example.image_font_add_app
+package com.example.image_font_add
 
 import io.flutter.embedding.android.FlutterActivity
 
