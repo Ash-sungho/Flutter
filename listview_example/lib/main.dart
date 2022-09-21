@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       body: TabBarView(
         controller: controller,
-        children:  <Widget>[FirstPage(list: animalList), SecondPage()],
+        children:  <Widget>[FirstPage(list: animalList), SecondPage(list: animalList,)],
       ),
       bottomNavigationBar: TabBar(
         tabs: const <Tab>[
