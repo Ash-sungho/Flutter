@@ -21,7 +21,7 @@ class _FirstPageState extends State<FirstPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //푸시로 이동하기 
+          //푸시로 이동하기
           // Navigator.of(context).push(
           //   MaterialPageRoute(
           //     builder: (context) => SecondPage(),

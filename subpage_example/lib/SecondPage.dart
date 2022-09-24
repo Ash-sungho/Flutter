@@ -15,20 +15,19 @@ class _SecondPageState extends State<SecondPage> {
         title: Text('Second Page'),
       ),
       body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:<Widget>[
-              Text('두번째 페이지'),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigator.of(context).
-
-                },
-                child: Text('돌아가기'),
-              ),
-            ]
-
-          )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('두번째 페이지'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('돌아가기'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
