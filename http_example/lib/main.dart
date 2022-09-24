@@ -35,10 +35,13 @@ class _HttpAppState extends State<HttpApp> {
   int page = 1;
 
   Future<void> _launchUrl(url) async {
+
     var parseUrl = Uri.parse(url);
-    if (!await launchUrl(parseUrl)) {
+
+    if (!await launchUrl(parseUrl, mode:LaunchMode.externalNonBrowserApplication )) {
       throw 'Could not launch';
     }
+
   }
 
   Future<String> getJSONData() async {
