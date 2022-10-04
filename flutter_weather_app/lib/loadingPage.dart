@@ -5,7 +5,7 @@ import 'package:flutter_weather_app/weatherAppMain.dart';
 const apikey = '6add483a794586b5e443fbc076796900';
 
 class LoadingPage extends StatefulWidget {
-  LoadingPage({Key? key}) : super(key: key);
+  const LoadingPage({Key? key}) : super(key: key);
 
   @override
   State<LoadingPage> createState() => _LoadingPageState();
@@ -21,6 +21,12 @@ class _LoadingPageState extends State<LoadingPage> {
     await network.locationPermission();
     lat = network.lat;
     log = network.log;
+
+    item = await network.getWeather(
+        context: context,
+        uri:
+        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$log&appid=$apikey');
+    print(item);
   }
 
   @override
@@ -41,16 +47,8 @@ class _LoadingPageState extends State<LoadingPage> {
         child: ElevatedButton(
           child: const Text('fetchData'),
           onPressed: () async {
-            item = await network.getWeather(
-                uri:
-                    'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$log&appid=$apikey');
-            print(item);
 
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => WeatherAppMain(),
-              ),
-            );
+
           },
         ),
       ),

@@ -28,7 +28,7 @@ class _WeatherAppMainState extends State<WeatherAppMain> {
               Container(
                 child: Column(
                   children: const <Widget>[
-                    
+
                     Text('서울')
                   ],
                 ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_app/weatherAppMain.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,14 +10,20 @@ class Network {
   double? log ;
 
 
-  Future<Map<String, dynamic>?> getWeather({required String uri}) async {
+  Future<Map<String, dynamic>?> getWeather({required String uri,required context}) async {
     this.uri = uri;
     try {
       http.Response response = await http.get(Uri.parse(uri));
       if (response.statusCode == 200) {
         String? jsonData = response.body;
         Map<String, dynamic> item = jsonDecode(jsonData);
+        Navigator.push(context,
+          MaterialPageRoute(
+            builder: (context) =>const WeatherAppMain(),
+          ),
+        );
         return item;
+
       }
     } catch (e) {
       debugPrint(e.toString());
