@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getCurrentUser();
   }
@@ -33,23 +34,46 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('chat Screen'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                _authentication.signOut();
-                Navigator.pop(context);
+        appBar: AppBar(
+          title: const Text('chat Screen'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  _authentication.signOut();
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.exit_to_app_sharp,
+                  color: Colors.white,
+                ))
+          ],
+        ),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('chats/x0pzGqCs9Ab1d8gTnqeN/message')
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final docs = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: docs.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    docs[index]['Text'],
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                );
               },
-              icon: const Icon(
-                Icons.exit_to_app_sharp,
-                color: Colors.white,
-              ))
-        ],
-      ),
-      body: const Center(
-        child: Text('Chat Screen'),
-      ),
-    );
+            );
+          },
+        ));
   }
 }
