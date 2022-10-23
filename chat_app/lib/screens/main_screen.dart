@@ -3,6 +3,7 @@ import 'package:chat_app/screens/chatScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   bool isSignupScreen = true;
   final _formKey = GlobalKey<FormState>();
-  bool showSpinner =  false;
+  bool showSpinner = false;
   String userName = '';
   String userEmail = '';
   String userPassword = '';
@@ -418,7 +419,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       setState(() {
                         showSpinner = true;
                       });
-                      if (isSignupScreen) {
+                       if (isSignupScreen) {
                         _tryValidation();
                         try {
                           print(userEmail);
@@ -427,6 +428,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           final newUser = await _authentication
                               .createUserWithEmailAndPassword(
                                   email: userEmail, password: userPassword);
+                          await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(newUser.user!.uid)
+                              .set({
+                            'userName': userName,
+                            'email': userEmail,
+                          });
 
                           if (newUser.user != null) {
                             if (!mounted) {
@@ -447,11 +455,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
-                              'Please check your email and password',
+                              'Please check your email and password2',
                               style: TextStyle(backgroundColor: Colors.blue),
                             )),
                           );
                         }
+                        setState(() {
+                          showSpinner = false;
+                        });
                       }
                       if (!isSignupScreen) {
                         _tryValidation();
@@ -467,18 +478,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             if (!mounted) {
                               return;
                             }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ChatScreen(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const ChatScreen(),
+                            //   ),
+                            // );
                           }
                         } catch (e) {
                           debugPrint(e.toString());
                           if (!mounted) {
                             return;
                           }
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
@@ -487,6 +499,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             )),
                           );
                         }
+                        setState(() {
+                          showSpinner = false;
+                        });
                       }
                     },
                     child: Container(

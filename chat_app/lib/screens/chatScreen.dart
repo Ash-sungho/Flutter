@@ -18,7 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (user != null) {
       try {
         loggedUser = user;
-        print(loggedUser!.email);
+        debugPrint(loggedUser!.email);
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -34,46 +34,46 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('chat Screen'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  _authentication.signOut();
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.exit_to_app_sharp,
-                  color: Colors.white,
-                ))
-          ],
-        ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('chats/x0pzGqCs9Ab1d8gTnqeN/message')
-              .snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if(snapshot.connectionState == ConnectionState.waiting){
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            final docs = snapshot.data!.docs;
-            return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    docs[index]['Text'],
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                );
+      appBar: AppBar(
+        title: const Text('chat Screen'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _authentication.signOut();
               },
+              icon: const Icon(
+                Icons.exit_to_app_sharp,
+                color: Colors.white,
+              ))
+        ],
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('chats/x0pzGqCs9Ab1d8gTnqeN/message')
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ));
+          }
+
+          final docs = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  docs[index]['text'],
+                  style: const TextStyle(fontSize: 20),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
