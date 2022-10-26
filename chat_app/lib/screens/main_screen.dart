@@ -1,3 +1,4 @@
+import 'package:chat_app/add_image/add_image.dart';
 import 'package:chat_app/config/palette.dart';
 import 'package:chat_app/screens/chatScreen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     if (isValid) {
       _formKey.currentState!.save();
     }
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return  Dialog(
+          backgroundColor: Colors.white,
+          child: AddImage()
+        );
+      },
+    );
   }
 
   @override
@@ -155,16 +168,34 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               },
                               child: Column(
                                 children: <Widget>[
-                                  Text('SignUp',
+                                  Row(children: [
+                                    Text(
+                                      'SignUp',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: !isSignupScreen
                                               ? Palette.textColor1
-                                              : Palette.activeColor)),
+                                              : Palette.activeColor),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    GestureDetector(
+                                        onTap: isSignupScreen ?() {
+                                          showAlert(context);
+                                        } : null ,
+                                        child: Icon(
+                                          Icons.image,
+                                          color: isSignupScreen
+                                              ? Colors.cyan
+                                              : Colors.grey[300],
+                                        ))
+                                  ]),
                                   if (isSignupScreen)
                                     Container(
-                                      margin: const EdgeInsets.only(top: 3),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 3, 35, 0),
                                       width: 55,
                                       height: 2,
                                       color: Colors.orange,
@@ -419,7 +450,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       setState(() {
                         showSpinner = true;
                       });
-                       if (isSignupScreen) {
+                      if (isSignupScreen) {
                         _tryValidation();
                         try {
                           print(userEmail);

@@ -10,7 +10,10 @@ class Messages extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('chat').orderBy('time',descending: true).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('chat')
+          .orderBy('time', descending: true)
+          .snapshots(),
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -18,14 +21,19 @@ class Messages extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        final chatDocs =  snapshot.data!.docs;
+        final chatDocs = snapshot.data!.docs;
 
         return ListView.builder(
           reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (context, index) {
-            return ChatBubble(chatDocs[index]['text'],chatDocs[index]['userId'].toString() == user!.uid);
-          },);
-      },);
+            return ChatBubbles(
+                chatDocs[index]['text'],
+                chatDocs[index]['userId'].toString() == user!.uid,
+                chatDocs[index]['userName']);
+          },
+        );
+      },
+    );
   }
 }
